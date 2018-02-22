@@ -1,44 +1,44 @@
 class Artist
   attr_accessor :name,:songs
-  @@all ||= []
+  @@all=[]
+
   def initialize(name)
     @name=name
-    @songs=[]
-    # @@all ||= []
-
+    @songs = []
   end #initialize
 
   def add_song(song)
     @songs << song
   end
 
-  def self.all
-    puts "**************CLASS-ARTIST-method-ALL-was called #{@@all}"
-    @@all
+  def print_songs
+    @songs.each { |s| puts s.name}
   end
 
   def save
     @@all << self
   end
 
+
+  def self.all
+    @@all
+  end
+
+  def self.create(name)
+    a = Artist.new(name)
+    a.save
+    a
+
+  end
+
+  def self.find(name)
+    @@all.detect {|a| a.name == name}
+  end
+
   def self.find_or_create_by_name(name)
-    artist=nil
-    @@all.each do |artist_existing|
-      # puts  "***************#{artist_existing.name}"
-      if artist_existing.name == name       #   is artist in @all
-        artist = artist_existing            #   if in all return artist
-        break
-      end #end if
-    end #each
-    if artist.nil?
-      artist = Artist.new(name)  #  if not in all create artist
-      artist.save
-    end
-
-    artist
-  end #find_or_create_by_name
-
-  def print_songs
-    songs.each {|song| puts "#{song.title}"}
-  end # print_songs
+    a = self.find(name)
+    a = self.create(name) if a.nil?
+    # puts "*******#{a}"
+    a
+  end
 end #class
